@@ -1,0 +1,97 @@
+Lab 8
+Aleksander Braksator: abraksat@calpoly.edu	
+Brad Foster: bfoste20@calpoly.edu
+
+use the getQuery.java file to get all desired results.
+
+MUST be run with two tickers given:
+"java getQuery TICKER1 TICKER2"
+
+TICKER1 is what the individual stock report will be on, 
+and TICKER2 is what TICKER1 will be compared to in table #8. 
+(Note: The top 5 stocks we're comparing TICKER 1 to in query Number 7 
+       are CHTR, ISRG, AMZN, MLM and PCLN. If TICKER2 equals any of
+       these stocks, the outputs won't be as expected. Luckily, none of 
+       these stocks were assigned to our team).
+
+The program should take at most 15-20 seconds to run.
+
+No temporary database was used in the project, so for the credentials.in file simply
+put "nyse" as the third line.
+
+For General Analytic Data Report #4, we chose these 10 stocks with a SQL
+statement that produced a cartesian product of all stocks on the first day of
+trading in 2016 and all stocks on the last day of trading in 2016, and found which
+pairs of stocks had the greatest increase in relative strength. 
+
+For General Analytic Report #5, we found the average open price of each sector for 
+every month, and then wrote some java code to analyze the differences in the average 
+opening prices from month to month and calculated the percent increase from month to month.
+If the average difference turned out to be a negative number, we concluded the sector had 
+"Negative Growth". If the total percent increase was less than 0.05, then the sector was
+"showing resilience". If it was between 0.05 and 0.15, we said there was steady growth. 
+If it was between 0.15 and 0.3 it was moderately outperforming. If it was between 0.3 and 0.5, it
+was impressively growing. Any sector with an average difference in month to month pricing
+greater than 0.5 was tremendously outperforming. That means, the sector itself grew by 50% total
+month to month.
+
+
+For Individual query 4 and 5, we decided to do a short term analysis on the stock's 
+BUY/SELL/HOLD status for each date based on its price and volumes in the previous days 
+and months. After reading some investopedia articles on predicting stock values based
+on price and volume, we wrote out a decision tree, used SQL to gather the day to day
+prices and volumes of the ticker in question for two-three months before the date in 
+question, and wrote a java algorithm which implemented the decision tree.
+
+To work with standardized numbers for price and volumes, we made an arraylist of the 
+normalized prices and volumes which was fed into the Java program so that the mean normal
+price and volume were 0 so that the program could analyze stocks regardless of their 
+inflated values. 
+
+The decision tree was as follows:
+
+Does the stock currently have more than average volume?
+    YES: Has the stock price been on the rise the last few days?
+        YES: Is the volume on a non-decreasing trend?
+            YES: HOLD
+            NO: SELL
+        STEADY: is the volume on a non-decreasing trend?
+            YES: BUY
+            NO: SELL
+        NO: Is the volume on a non decreasing trend?
+            YES: BUY
+            NO: HOLD (since volume is higher than average, there may be hope in the long run)
+    NO: Has the stock price been on the rise the last few days?
+        YES: Is the volume on a non-decreasing trend?
+            YES: HOLD
+            NO: SELL
+        STEADY: Is the volume on a non-decreasing trend?
+            YES: BUY
+            NO: HOLD
+        NO: Is the volume on a non-decreasing trend?
+            YES: BUY
+            NO: SELL
+
+It is hard to make a lot of money on a day by day basis on the stock market, so a lot of our
+decisions ended up being HOLDS and for the most part they were OK HOLDS. None of the buys I 
+saw ended up being spectacular buys (but the program did have high standards), 
+although some had good short term growth. 
+
+The program judged each decision by looking at the next 10 days and the max/min prices that
+occurred (which if timed correctly would have been ideal buy/sell points depending on 
+the situation).
+
+If the decision was a BUY, we made sure that the max price over the next 10 days was significantly
+higher than the price observed on the day of the buy and ranked out the strength of the buy
+depending on the normalized value of this max price. 
+If the decision was a SELL, we made sure that the next few days the price started significantly
+plummeting, and rated the strength of the sell base don the normalized value of the min Price
+over the next 10 days.
+If the decision was a HOLD, we made sure that the price didn't plummet the next few days and
+judged the strength of the hold based on that.
+
+For individual query number 7, the top 5 stocks were based on absolute price increase.
+
+For individual query number 8, the decision is based on which ever stock has the greater
+value for ticker price change for 2016 (based on relative increase).
+
